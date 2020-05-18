@@ -70,24 +70,6 @@ static void MX_LPUART1_UART_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
-//inline int square_value(int sq_val, int sq_num)
-//{
-//	uint8_t i=0;
-//	uint16_t sq_return=1;
-//	if(sq_num==0)
-//	{
-//		return 1;
-//	}
-//	else
-//	{
-//		for(i=0;i<sq_num;i++)
-//		{
-//			sq_return*=sq_val;
-//		}
-//		return sq_return;
-//	}
-//}
-
 int hexTodec(uint16_t hex_value)
 {
 	uint8_t val=0x0f,i;
@@ -283,44 +265,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-//	  if((receive_complete==0)&&(sleep_mode==0))
-//	  {
-//		  while(HAL_UART_GetState(&hlpuart1)!=HAL_UART_STATE_READY)
-//		  {
-//		  }
-//		  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)pms7003_Buffer,32);
-//	  }
-
 	  if((receive_complete==0)&&(HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY))
 	  {
 		  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)pms7003_Buffer,32);
 	  }
 
-
-//	  if((receive_complete==1)&&(HAL_UART_GetState(&huart1)==HAL_UART_STATE_READY))
 	  if(receive_complete==1)
 	  {
 		  print_PMS7003();
 	  }
-//
-//	  if(30<i&&i<40)
-//	  {
-//		  if(sleep_mode==0)
-//		  {
-//			  printf("Sleep\r\n");
-//			  write_PMS7003("Sleep");
-//			  sleep_mode=1;
-//		  }
-//	  }
-//	  else if(40<=i)
-//	  {
-//		  printf("WakeUp\r\n");
-//		  write_PMS7003("WakeUp");
-//		  i=0;
-//		  sleep_mode=0;
-//	  }
-//	  i++;
 	  HAL_Delay(2300);
   }
   /* USER CODE END 3 */
