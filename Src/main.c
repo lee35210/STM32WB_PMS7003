@@ -70,31 +70,6 @@ static void MX_LPUART1_UART_Init(void);
 static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
-int hexTodec(uint16_t hex_value)
-{
-	uint8_t val=0x0f,i;
-	uint16_t sum=0;
-
-	for(i=0;i<4;i++)
-	{
-		val=((0x0f)&(hex_value>>4*i));
-		if(('0'<=val)&&(val<='9'))
-		{
-			val=val-48;
-		}
-		else if(('a'<=val)&&(val<='f'))
-		{
-			val=val-97+10;
-		}
-		else if(('A'<=val)&&(val<='F'))
-		{
-			val=val-65+10;
-		}
-		sum+=(uint16_t)(val*pow(16,i));
-	}
-	return sum;
-}
-
 void print_PMS7003(void)
 {
 	uint16_t combine_value, check_byte_receive, check_byte_calculate=0;
@@ -109,20 +84,6 @@ void print_PMS7003(void)
 
 	printf("pms : 0x%X	crc_cal : 0x%X\r\n",check_byte_receive,check_byte_calculate);
 
-
-	if(check_byte_receive==check_byte_calculate)
-	{
-		printf("PM1.0 : %d	",hexTodec(combine_value=(pms7003_Buffer[10]<<8)|pms7003_Buffer[11]));
-		printf("PM2.5 : %d	",hexTodec(combine_value=(pms7003_Buffer[12]<<8)|pms7003_Buffer[13]));
-		printf("PM10 : %d	",hexTodec(combine_value=(pms7003_Buffer[14]<<8)|pms7003_Buffer[15]));
-		printf("0.3um : %d	",hexTodec(combine_value=(pms7003_Buffer[16]<<8)|pms7003_Buffer[17]));
-		printf("0.5um : %d	",hexTodec(combine_value=(pms7003_Buffer[18]<<8)|pms7003_Buffer[19]));
-		printf("1.0um : %d	",hexTodec(combine_value=(pms7003_Buffer[20]<<8)|pms7003_Buffer[21]));
-		printf("2.5um : %d	",hexTodec(combine_value=(pms7003_Buffer[22]<<8)|pms7003_Buffer[23]));
-		printf("5.0um : %d	",hexTodec(combine_value=(pms7003_Buffer[24]<<8)|pms7003_Buffer[25]));
-		printf("10.0um : %d\n",hexTodec(combine_value=(pms7003_Buffer[26]<<8)|pms7003_Buffer[27]));
-		HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
-	}
 	if(check_byte_receive==check_byte_calculate)
 	{
 		printf("PM1.0 : %d	",(combine_value=(pms7003_Buffer[10]<<8)|pms7003_Buffer[11]));
@@ -270,10 +231,10 @@ int main(void)
 		  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)pms7003_Buffer,32);
 	  }
 
-	  if(receive_complete==1)
-	  {
-		  print_PMS7003();
-	  }
+//	  if(receive_complete==1)
+//	  {
+//		  print_PMS7003();
+//	  }
 	  HAL_Delay(2300);
   }
   /* USER CODE END 3 */
@@ -600,7 +561,8 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
 {
-	receive_complete=1;
+//	receive_complete=1;
+	print_PMS7003();
 }
 
 
