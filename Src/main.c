@@ -229,10 +229,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if((receive_complete==0)&&(HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY))
-	  {
-		  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)pms7003_Buffer,32);
-	  }
+//	  if((receive_complete==0)&&(HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY))
+//	  {
+//		  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)pms7003_Buffer,32);
+//	  }
 
 //	  if(receive_complete==1)
 //	  {
@@ -618,6 +618,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	printf("Timer Interrupt called\r\n");
+	if((receive_complete==0)&&(HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY))
+	{
+		HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)pms7003_Buffer,32);
+	}
 }
 
 /* USER CODE END 4 */
