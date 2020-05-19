@@ -52,6 +52,8 @@ UART_HandleTypeDef huart1;
 DMA_HandleTypeDef hdma_lpuart1_rx;
 DMA_HandleTypeDef hdma_lpuart1_tx;
 
+TIM_HandleTypeDef htim16;
+
 /* USER CODE BEGIN PV */
 uint8_t pms7003_Buffer[32];
 uint8_t pms7003_send_buffer[7]={0x42,0x4d,0};
@@ -68,6 +70,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_DMA_Init(void);
 static void MX_LPUART1_UART_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_TIM16_Init(void);
 /* USER CODE BEGIN PFP */
 
 void print_PMS7003(void)
@@ -190,7 +193,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   /* USER CODE END 1 */
-  
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -215,6 +217,7 @@ int main(void)
   MX_LPUART1_UART_Init();
   MX_USB_Device_Init();
   MX_I2C1_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -258,6 +261,7 @@ void SystemClock_Config(void)
   __HAL_RCC_PLL_PLLSOURCE_CONFIG(RCC_PLLSOURCE_MSI);
   /** Configure LSE Drive Capability 
   */
+  HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
   /** Configure the main internal regulator output voltage 
   */
@@ -310,7 +314,6 @@ void SystemClock_Config(void)
   PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_PLLSAI1;
   PeriphClkInitStruct.SmpsClockSelection = RCC_SMPSCLKSOURCE_HSI;
   PeriphClkInitStruct.SmpsDivSelection = RCC_SMPSCLKDIV_RANGE1;
-
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -468,6 +471,40 @@ static void MX_USART1_UART_Init(void)
 
 }
 
+/**
+  * @brief TIM16 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM16_Init(void)
+{
+
+  /* USER CODE BEGIN TIM16_Init 0 */
+
+  /* USER CODE END TIM16_Init 0 */
+
+  /* USER CODE BEGIN TIM16_Init 1 */
+
+  /* USER CODE END TIM16_Init 1 */
+  htim16.Instance = TIM16;
+  htim16.Init.Prescaler = 32000-1;
+  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim16.Init.Period = 5000-1;
+  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim16.Init.RepetitionCounter = 0;
+  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM16_Init 2 */
+
+  HAL_TIM_Base_Start_IT(&htim16);
+
+  /* USER CODE END TIM16_Init 2 */
+
+}
+
 /** 
   * Enable DMA controller clock
   */
@@ -576,6 +613,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 //  if (GPIO_Pin == B1_Pin)
 //  {
 //  }
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	printf("Timer Interrupt called\r\n");
 }
 
 /* USER CODE END 4 */
