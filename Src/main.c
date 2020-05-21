@@ -521,7 +521,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		print_PMS7003();
 	}
-	//test
 }
 
 
