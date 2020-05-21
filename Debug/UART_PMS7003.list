@@ -35,11 +35,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  15 .debug_line   0000b4f9  00000000  00000000  0005dec8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_str    00008590  00000000  00000000  000693c1  2**0
+ 16 .debug_str    00008596  00000000  00000000  000693c1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .comment      0000007c  00000000  00000000  00071951  2**0
+ 17 .comment      0000007c  00000000  00000000  00071957  2**0
                   CONTENTS, READONLY
- 18 .debug_frame  00003fb0  00000000  00000000  000719d0  2**2
+ 18 .debug_frame  00003fb0  00000000  00000000  000719d4  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -11211,11 +11211,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  8004970:	462a      	mov	r2, r5
  8004972:	4620      	mov	r0, r4
  8004974:	4905      	ldr	r1, [pc, #20]	; (800498c <HAL_TIM_PeriodElapsedCallback+0x50>)
-				//HAL_UART_Receive_DMA execution failed
+			{
+				//HAL_UART_Receive_DMA execution fail
 			}
 		}
 	}
-
 }
  8004976:	e8bd 4038 	ldmia.w	sp!, {r3, r4, r5, lr}
 			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
