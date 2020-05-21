@@ -53,10 +53,7 @@ TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN PV */
 uint8_t pms7003_Buffer[32];
 uint8_t pms7003_send_buffer[7]={0x42,0x4d,0};
-uint8_t transfer_complete=0;
-uint8_t receive_complete=0;
 int sleep_mode=0;
-uint16_t check_code_value=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,7 +70,6 @@ void print_PMS7003(void)
 	uint16_t combine_value, check_byte_receive, check_byte_calculate=0;
 
 	check_byte_receive=pms7003_Buffer[30]<<8|pms7003_Buffer[31];
-
 
 	for(uint8_t i=0;i<30;i++)
 	{
@@ -506,8 +502,10 @@ static void MX_GPIO_Init(void)
   */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-//	printf("transfer complete\r\n");
-	transfer_complete=1;
+	if(huart->Instance==LPUART1)
+	{
+
+	}
 }
 
 /**
