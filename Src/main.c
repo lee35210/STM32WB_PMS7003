@@ -53,7 +53,7 @@ TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN PV */
 uint8_t pms7003_Buffer[32];
 uint8_t pms7003_send_buffer[7]={0x42,0x4d,0};
-int sleep_mode=0;
+uint8_t receive_complete=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -546,11 +546,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			__HAL_UART_FLUSH_DRREGISTER(&hlpuart1);
 			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
 			{
-				//HAL_UART_Receive_DMA execution failed
+				//HAL_UART_Receive_DMA execution fail
 			}
 		}
 	}
-
 }
 
 /* USER CODE END 4 */
