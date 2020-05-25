@@ -78,23 +78,29 @@ void print_PMS7003(void)
 
 	printf("pms : 0x%X	crc_cal : 0x%X\r\n",check_byte_receive,check_byte_calculate);
 
-	if(check_byte_receive==check_byte_calculate)
+//	if(check_byte_receive==check_byte_calculate)
+//	{
+//		printf("PM1.0 : %d	",(combine_value=(pms7003_Buffer[10]<<8)|pms7003_Buffer[11]));
+//		printf("PM2.5 : %d	",(combine_value=(pms7003_Buffer[12]<<8)|pms7003_Buffer[13]));
+//		printf("PM10 : %d	",(combine_value=(pms7003_Buffer[14]<<8)|pms7003_Buffer[15]));
+//		printf("0.3um : %d	",(combine_value=(pms7003_Buffer[16]<<8)|pms7003_Buffer[17]));
+//		printf("0.5um : %d	",(combine_value=(pms7003_Buffer[18]<<8)|pms7003_Buffer[19]));
+//		printf("1.0um : %d	",(combine_value=(pms7003_Buffer[20]<<8)|pms7003_Buffer[21]));
+//		printf("2.5um : %d	",(combine_value=(pms7003_Buffer[22]<<8)|pms7003_Buffer[23]));
+//		printf("5.0um : %d	",(combine_value=(pms7003_Buffer[24]<<8)|pms7003_Buffer[25]));
+//		printf("10.0um : %d\n",(combine_value=(pms7003_Buffer[26]<<8)|pms7003_Buffer[27]));
+//		HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
+//	}
+//	else
+//	{
+//		printf("Check bytes not matched\r\n");
+//	}
+
+	for(int i=0;i<32;i++)
 	{
-		printf("PM1.0 : %d	",(combine_value=(pms7003_Buffer[10]<<8)|pms7003_Buffer[11]));
-		printf("PM2.5 : %d	",(combine_value=(pms7003_Buffer[12]<<8)|pms7003_Buffer[13]));
-		printf("PM10 : %d	",(combine_value=(pms7003_Buffer[14]<<8)|pms7003_Buffer[15]));
-		printf("0.3um : %d	",(combine_value=(pms7003_Buffer[16]<<8)|pms7003_Buffer[17]));
-		printf("0.5um : %d	",(combine_value=(pms7003_Buffer[18]<<8)|pms7003_Buffer[19]));
-		printf("1.0um : %d	",(combine_value=(pms7003_Buffer[20]<<8)|pms7003_Buffer[21]));
-		printf("2.5um : %d	",(combine_value=(pms7003_Buffer[22]<<8)|pms7003_Buffer[23]));
-		printf("5.0um : %d	",(combine_value=(pms7003_Buffer[24]<<8)|pms7003_Buffer[25]));
-		printf("10.0um : %d\n",(combine_value=(pms7003_Buffer[26]<<8)|pms7003_Buffer[27]));
-		HAL_GPIO_TogglePin(LD2_GPIO_Port,LD2_Pin);
+		printf("%X ",pms7003_Buffer[i]);
 	}
-	else
-	{
-		printf("Check bytes not matched\r\n");
-	}
+	printf("\r\n");
 }
 
 void write_PMS7003(char* cmd)
@@ -207,6 +213,11 @@ int main(void)
   MX_USB_Device_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
+
+  if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
+  {
+	  //HAL_UART_Receive_DMA execution fail
+  }
 
   /* USER CODE END 2 */
 
@@ -538,18 +549,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	if(htim->Instance==TIM16)
-	{
-		if((HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY)&&
-		   (HAL_DMA_GetState(&hdma_lpuart1_rx)==HAL_DMA_STATE_READY))
-		{
-			__HAL_UART_FLUSH_DRREGISTER(&hlpuart1);
-			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
-			{
-				//HAL_UART_Receive_DMA execution fail
-			}
-		}
-	}
+//	if(htim->Instance==TIM16)
+//	{
+//		if((HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY)&&
+//		   (HAL_DMA_GetState(&hdma_lpuart1_rx)==HAL_DMA_STATE_READY))
+//		{
+//			__HAL_UART_FLUSH_DRREGISTER(&hlpuart1);
+//			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
+//			{
+//				//HAL_UART_Receive_DMA execution fail
+//			}
+//		}
+//	}
 }
 
 /* USER CODE END 4 */
