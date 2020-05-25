@@ -503,22 +503,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 //  }
 }
 
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-//{
-//	if(htim->Instance==TIM16)
-//	{
-//		if((HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY)&&
-//		   (HAL_DMA_GetState(&hdma_lpuart1_rx)==HAL_DMA_STATE_READY))
-//		{
-//			__HAL_UART_FLUSH_DRREGISTER(&hlpuart1);
-//			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
-//			{
-//				//HAL_UART_Receive_DMA execution fail
-//			}
-//		}
-//	}
-//}
-
 /* USER CODE END 4 */
 
 /**
