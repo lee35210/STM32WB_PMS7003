@@ -48,8 +48,6 @@ UART_HandleTypeDef huart1;
 DMA_HandleTypeDef hdma_lpuart1_rx;
 DMA_HandleTypeDef hdma_lpuart1_tx;
 
-TIM_HandleTypeDef htim16;
-
 /* USER CODE BEGIN PV */
 uint8_t pms7003_Buffer[32];
 uint8_t pms7003_send_buffer[7]={0x42,0x4d,0};
@@ -62,7 +60,6 @@ static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_DMA_Init(void);
 static void MX_LPUART1_UART_Init(void);
-static void MX_TIM16_Init(void);
 /* USER CODE BEGIN PFP */
 
 void print_PMS7003(void)
@@ -205,8 +202,12 @@ int main(void)
   MX_DMA_Init();
   MX_LPUART1_UART_Init();
   MX_USB_Device_Init();
-  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
+
+  if(HAL_UART_Receive_DMA(&hlpuart1,pms7003_Buffer,32)!=HAL_OK)
+  {
+	  //fail
+  }
 
   /* USER CODE END 2 */
 
@@ -398,40 +399,6 @@ static void MX_USART1_UART_Init(void)
 
 }
 
-/**
-  * @brief TIM16 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM16_Init(void)
-{
-
-  /* USER CODE BEGIN TIM16_Init 0 */
-
-  /* USER CODE END TIM16_Init 0 */
-
-  /* USER CODE BEGIN TIM16_Init 1 */
-
-  /* USER CODE END TIM16_Init 1 */
-  htim16.Instance = TIM16;
-  htim16.Init.Prescaler = 32000-1;
-  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim16.Init.Period = 5000-1;
-  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim16.Init.RepetitionCounter = 0;
-  htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM16_Init 2 */
-
-  HAL_TIM_Base_Start_IT(&htim16);
-
-  /* USER CODE END TIM16_Init 2 */
-
-}
-
 /** 
   * Enable DMA controller clock
   */
@@ -536,21 +503,21 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 //  }
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if(htim->Instance==TIM16)
-	{
-		if((HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY)&&
-		   (HAL_DMA_GetState(&hdma_lpuart1_rx)==HAL_DMA_STATE_READY))
-		{
-			__HAL_UART_FLUSH_DRREGISTER(&hlpuart1);
-			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
-			{
-				//HAL_UART_Receive_DMA execution fail
-			}
-		}
-	}
-}
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+//{
+//	if(htim->Instance==TIM16)
+//	{
+//		if((HAL_UART_GetState(&hlpuart1)==HAL_UART_STATE_READY)&&
+//		   (HAL_DMA_GetState(&hdma_lpuart1_rx)==HAL_DMA_STATE_READY))
+//		{
+//			__HAL_UART_FLUSH_DRREGISTER(&hlpuart1);
+//			if(HAL_UART_Receive_DMA(&hlpuart1, pms7003_Buffer, 32)!=HAL_OK)
+//			{
+//				//HAL_UART_Receive_DMA execution fail
+//			}
+//		}
+//	}
+//}
 
 /* USER CODE END 4 */
 
